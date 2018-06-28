@@ -1,0 +1,249 @@
+问题1：kafka服务无法在eureka上注册。问题详述如下：
+2018-06-28 11:41:50.483  INFO [test,,,] 17544 --- [           main] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
+	acks = 1
+	batch.size = 16384
+	block.on.buffer.full = false
+	bootstrap.servers = [kafka:9092]
+	buffer.memory = 33554432
+	client.id = producer-1
+	compression.type = none
+	connections.max.idle.ms = 540000
+	interceptor.classes = null
+	key.serializer = class org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.fetch.timeout.ms = 60000
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.sample.window.ms = 30000
+	partitioner.class = class org.apache.kafka.clients.producer.internals.DefaultPartitioner
+	receive.buffer.bytes = 32768
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 0
+	retry.backoff.ms = 100
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.mechanism = GSSAPI
+	security.protocol = PLAINTEXT
+	send.buffer.bytes = 131072
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.1, TLSv1]
+	ssl.endpoint.identification.algorithm = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLS
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	timeout.ms = 30000
+	value.serializer = class org.apache.kafka.common.serialization.ByteArraySerializer
+
+2018-06-28 11:41:50.554  WARN [test,,,] 17544 --- [           main] o.a.k.clients.producer.ProducerConfig    : The configuration 'key.deserializer' was supplied but isn't a known config.
+2018-06-28 11:41:50.554  WARN [test,,,] 17544 --- [           main] o.a.k.clients.producer.ProducerConfig    : The configuration 'value.deserializer' was supplied but isn't a known config.
+2018-06-28 11:41:50.555  INFO [test,,,] 17544 --- [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version : 0.10.1.1
+2018-06-28 11:41:50.555  INFO [test,,,] 17544 --- [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId : f10ef2720b03b247
+2018-06-28 11:51:57.938 ERROR [test,,,] 17544 --- [           main] o.s.c.s.b.k.p.KafkaTopicProvisioner      : Cannot initialize Binder
+
+org.apache.kafka.common.errors.TimeoutException: Failed to update metadata after 60000 ms.
+
+2018-06-28 11:51:57.940  WARN [test,,,] 17544 --- [           main] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'outputBindingLifecycle'; nested exception is org.springframework.cloud.stream.binder.BinderException: Cannot initialize binder:
+2018-06-28 11:51:58.722  INFO [test,,,] 17544 --- [           main] o.s.i.monitor.IntegrationMBeanExporter   : Unregistering JMX-exposed beans on shutdown
+2018-06-28 11:51:58.722  INFO [test,,,] 17544 --- [           main] o.s.i.monitor.IntegrationMBeanExporter   : Unregistering JMX-exposed beans
+2018-06-28 11:51:58.723  INFO [test,,,] 17544 --- [           main] o.s.i.monitor.IntegrationMBeanExporter   : Summary on shutdown: nullChannel
+2018-06-28 11:51:58.723  INFO [test,,,] 17544 --- [           main] o.s.i.monitor.IntegrationMBeanExporter   : Summary on shutdown: m2swrite
+2018-06-28 11:51:58.723  INFO [test,,,] 17544 --- [           main] o.s.i.monitor.IntegrationMBeanExporter   : Summary on shutdown: s2mwrite
+2018-06-28 11:51:58.723  INFO [test,,,] 17544 --- [           main] o.s.i.monitor.IntegrationMBeanExporter   : Summary on shutdown: errorChannel
+2018-06-28 11:51:58.723  INFO [test,,,] 17544 --- [           main] o.s.i.monitor.IntegrationMBeanExporter   : Summary on shutdown: m2sread
+2018-06-28 11:51:58.723  INFO [test,,,] 17544 --- [           main] o.s.i.monitor.IntegrationMBeanExporter   : Summary on shutdown: s2mread
+2018-06-28 11:51:58.723  INFO [test,,,] 17544 --- [           main] o.s.i.monitor.IntegrationMBeanExporter   : Summary on shutdown: _org.springframework.integration.errorLogger.handler
+2018-06-28 11:51:58.723  INFO [test,,,] 17544 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown
+2018-06-28 11:51:58.723  INFO [test,,,] 17544 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans
+2018-06-28 11:51:58.760  INFO [test,,,] 17544 --- [           main] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'taskScheduler'
+2018-06-28 11:51:58.761  INFO [test,,,] 17544 --- [           main] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@712407e3: startup date [Thu Jun 28 11:41:47 GMT+08:00 2018]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@40f7adfd
+2018-06-28 11:51:58.772  WARN [test,,,] 17544 --- [           main] s.c.a.AnnotationConfigApplicationContext : Exception thrown from ApplicationListener handling ContextClosedEvent
+
+org.springframework.beans.factory.BeanCreationNotAllowedException: Error creating bean with name 'eurekaAutoServiceRegistration': Singleton bean creation not allowed while singletons of this factory are in destruction (Do not request a bean from a BeanFactory in a destroy method implementation!)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:216) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:308) ~[spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1080) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.getTargetBean(ApplicationListenerMethodAdapter.java:283) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.doInvoke(ApplicationListenerMethodAdapter.java:253) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.processEvent(ApplicationListenerMethodAdapter.java:177) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.onApplicationEvent(ApplicationListenerMethodAdapter.java:140) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:393) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:399) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:347) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:991) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:958) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.cloud.stream.binder.DefaultBinderFactory.destroy(DefaultBinderFactory.java:84) [spring-cloud-stream-1.2.2.RELEASE.jar:1.2.2.RELEASE]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:272) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:583) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:555) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:516) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1032) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:556) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at com.huawei.mdt.TestSyncApplication.main(TestSyncApplication.java:40) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_25]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_25]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_25]
+	at java.lang.reflect.Method.invoke(Method.java:483) ~[na:1.8.0_25]
+	at org.springframework.boot.maven.AbstractRunMojo$LaunchRunner.run(AbstractRunMojo.java:527) [spring-boot-maven-plugin-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_25]
+
+2018-06-28 11:51:58.775  INFO [test,,,] 17544 --- [           main] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@3d96a837: startup date [Thu Jun 28 11:41:37 GMT+08:00 2018]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@40f7adfd
+2018-06-28 11:51:58.775  WARN [test,,,] 17544 --- [           main] s.c.a.AnnotationConfigApplicationContext : Exception thrown from ApplicationListener handling ContextClosedEvent
+
+org.springframework.beans.factory.BeanCreationNotAllowedException: Error creating bean with name 'eurekaAutoServiceRegistration': Singleton bean creation not allowed while singletons of this factory are in destruction (Do not request a bean from a BeanFactory in a destroy method implementation!)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:216) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:308) ~[spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1080) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.getTargetBean(ApplicationListenerMethodAdapter.java:283) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.doInvoke(ApplicationListenerMethodAdapter.java:253) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.processEvent(ApplicationListenerMethodAdapter.java:177) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.onApplicationEvent(ApplicationListenerMethodAdapter.java:140) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:393) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:399) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:347) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:991) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:958) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.cloud.context.named.NamedContextFactory.destroy(NamedContextFactory.java:76) [spring-cloud-context-1.2.5.RELEASE.jar:1.2.5.RELEASE]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:272) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:583) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:555) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:516) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968) [spring-beans-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1032) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:556) [spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at com.huawei.mdt.TestSyncApplication.main(TestSyncApplication.java:40) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_25]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_25]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_25]
+	at java.lang.reflect.Method.invoke(Method.java:483) ~[na:1.8.0_25]
+	at org.springframework.boot.maven.AbstractRunMojo$LaunchRunner.run(AbstractRunMojo.java:527) [spring-boot-maven-plugin-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_25]
+
+2018-06-28 11:51:58.779  INFO [test,,,] 17544 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2018-06-28 11:51:58.837  INFO [test,,,] 17544 --- [           main] utoConfigurationReportLoggingInitializer : 
+
+Error starting ApplicationContext. To display the auto-configuration report re-run your application with 'debug' enabled.
+2018-06-28 11:51:58.853 ERROR [test,,,] 17544 --- [           main] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.context.ApplicationContextException: Failed to start bean 'outputBindingLifecycle'; nested exception is org.springframework.cloud.stream.binder.BinderException: Cannot initialize binder:
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStart(DefaultLifecycleProcessor.java:176) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.DefaultLifecycleProcessor.access$200(DefaultLifecycleProcessor.java:50) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup.start(DefaultLifecycleProcessor.java:346) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.DefaultLifecycleProcessor.startBeans(DefaultLifecycleProcessor.java:149) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.DefaultLifecycleProcessor.onRefresh(DefaultLifecycleProcessor.java:112) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:880) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.finishRefresh(EmbeddedWebApplicationContext.java:144) ~[spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:546) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) ~[spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) ~[spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) ~[spring-boot-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at com.huawei.mdt.TestSyncApplication.main(TestSyncApplication.java:40) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_25]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_25]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_25]
+	at java.lang.reflect.Method.invoke(Method.java:483) ~[na:1.8.0_25]
+	at org.springframework.boot.maven.AbstractRunMojo$LaunchRunner.run(AbstractRunMojo.java:527) [spring-boot-maven-plugin-1.5.13.RELEASE.jar:1.5.13.RELEASE]
+	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_25]
+Caused by: org.springframework.cloud.stream.binder.BinderException: Cannot initialize binder:
+	at org.springframework.cloud.stream.binder.kafka.provisioning.KafkaTopicProvisioner.getPartitionsForTopic(KafkaTopicProvisioner.java:271) ~[spring-cloud-stream-binder-kafka-core-1.2.1.RELEASE.jar:1.2.1.RELEASE]
+	at org.springframework.cloud.stream.binder.kafka.KafkaMessageChannelBinder.createProducerMessageHandler(KafkaMessageChannelBinder.java:149) ~[spring-cloud-stream-binder-kafka-1.2.1.RELEASE.jar:1.2.1.RELEASE]
+	at org.springframework.cloud.stream.binder.kafka.KafkaMessageChannelBinder.createProducerMessageHandler(KafkaMessageChannelBinder.java:88) ~[spring-cloud-stream-binder-kafka-1.2.1.RELEASE.jar:1.2.1.RELEASE]
+	at org.springframework.cloud.stream.binder.AbstractMessageChannelBinder.doBindProducer(AbstractMessageChannelBinder.java:112) ~[spring-cloud-stream-1.2.2.RELEASE.jar:1.2.2.RELEASE]
+	at org.springframework.cloud.stream.binder.AbstractMessageChannelBinder.doBindProducer(AbstractMessageChannelBinder.java:57) ~[spring-cloud-stream-1.2.2.RELEASE.jar:1.2.2.RELEASE]
+	at org.springframework.cloud.stream.binder.AbstractBinder.bindProducer(AbstractBinder.java:152) ~[spring-cloud-stream-1.2.2.RELEASE.jar:1.2.2.RELEASE]
+	at org.springframework.cloud.stream.binding.BindingService.bindProducer(BindingService.java:124) ~[spring-cloud-stream-1.2.2.RELEASE.jar:1.2.2.RELEASE]
+	at org.springframework.cloud.stream.binding.BindableProxyFactory.bindOutputs(BindableProxyFactory.java:238) ~[spring-cloud-stream-1.2.2.RELEASE.jar:1.2.2.RELEASE]
+	at org.springframework.cloud.stream.binding.OutputBindingLifecycle.start(OutputBindingLifecycle.java:57) ~[spring-cloud-stream-1.2.2.RELEASE.jar:1.2.2.RELEASE]
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStart(DefaultLifecycleProcessor.java:173) ~[spring-context-4.3.17.RELEASE.jar:4.3.17.RELEASE]
+	... 18 common frames omitted
+Caused by: org.apache.kafka.common.errors.TimeoutException: Failed to update metadata after 60000 ms.
+
+[WARNING] 
+java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.springframework.boot.maven.AbstractRunMojo$LaunchRunner.run(AbstractRunMojo.java:527)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.springframework.context.ApplicationContextException: Failed to start bean 'outputBindingLifecycle'; nested exception is org.springframework.cloud.stream.binder.BinderException: Cannot initialize binder:
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStart(DefaultLifecycleProcessor.java:176)
+	at org.springframework.context.support.DefaultLifecycleProcessor.access$200(DefaultLifecycleProcessor.java:50)
+	at org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup.start(DefaultLifecycleProcessor.java:346)
+	at org.springframework.context.support.DefaultLifecycleProcessor.startBeans(DefaultLifecycleProcessor.java:149)
+	at org.springframework.context.support.DefaultLifecycleProcessor.onRefresh(DefaultLifecycleProcessor.java:112)
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:880)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.finishRefresh(EmbeddedWebApplicationContext.java:144)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:546)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
+	at com.huawei.mdt.TestSyncApplication.main(TestSyncApplication.java:40)
+	... 6 more
+Caused by: org.springframework.cloud.stream.binder.BinderException: Cannot initialize binder:
+	at org.springframework.cloud.stream.binder.kafka.provisioning.KafkaTopicProvisioner.getPartitionsForTopic(KafkaTopicProvisioner.java:271)
+	at org.springframework.cloud.stream.binder.kafka.KafkaMessageChannelBinder.createProducerMessageHandler(KafkaMessageChannelBinder.java:149)
+	at org.springframework.cloud.stream.binder.kafka.KafkaMessageChannelBinder.createProducerMessageHandler(KafkaMessageChannelBinder.java:88)
+	at org.springframework.cloud.stream.binder.AbstractMessageChannelBinder.doBindProducer(AbstractMessageChannelBinder.java:112)
+	at org.springframework.cloud.stream.binder.AbstractMessageChannelBinder.doBindProducer(AbstractMessageChannelBinder.java:57)
+	at org.springframework.cloud.stream.binder.AbstractBinder.bindProducer(AbstractBinder.java:152)
+	at org.springframework.cloud.stream.binding.BindingService.bindProducer(BindingService.java:124)
+	at org.springframework.cloud.stream.binding.BindableProxyFactory.bindOutputs(BindableProxyFactory.java:238)
+	at org.springframework.cloud.stream.binding.OutputBindingLifecycle.start(OutputBindingLifecycle.java:57)
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStart(DefaultLifecycleProcessor.java:173)
+	... 18 more
+Caused by: org.apache.kafka.common.errors.TimeoutException: Failed to update metadata after 60000 ms.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 10:38 min
+[INFO] Finished at: 2018-06-28T11:51:58+08:00
+[INFO] Final Memory: 72M/818M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:1.5.13.RELEASE:run (default-cli) on project TestMSSync: An exception occurred while running. null: InvocationTargetException: Failed to start bean 'outputBindingLifecycle'; nested exception is org.springframework.cloud.stream.binder.BinderException: Cannot initialize binder: Failed to update metadata after 60000 ms. -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+
+
+解决方案：
