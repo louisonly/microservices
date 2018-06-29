@@ -9,3 +9,4 @@ Flyway是一个用Java编写的开源数据库版本管理工具，或者说是�
 
 问题解决：在application.properties中设置flyway.baselineOnMigrate=true
 
+问题
