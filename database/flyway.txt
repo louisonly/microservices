@@ -11,4 +11,4 @@ Flyway是一个用Java编写的开源数据库版本管理工具，或者说是�
 
 问题3：contains a failed migration to version
 
-问题解决：出现这个问题，多半是sql语句出错了，导致执行失败。删除schema_version表，确认sql语句无误即可！
+问题解决：出现这个问题，多半是sql语句出错了，导致执行失败。删除schema_version表，确认sql语句无误，重新执行即可！
