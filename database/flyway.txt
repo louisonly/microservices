@@ -1,0 +1,11 @@
+Flyway是一个用Java编写的开源数据库版本管理工具，或者说是数据库结构变更工具，旨在帮助开发和运维更容易地管理数据库演进过程中的各个版本。
+
+问题1：报错提示unable to scan for sql migration in location:classpath:/db/migration
+
+问题解决：默认建立migration目录，导致该报错，建立classpath:/db/migration文件夹即可。如果需要自定义目录，需要配置属性flyway.locations
+注意是locations而不是location
+
+问题2：报错提示flyway.baselineOnMigrate相关错误
+
+问题解决：在application.properties中设置flyway.baselineOnMigrate=true
+
