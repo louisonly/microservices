@@ -1,0 +1,97 @@
+CREATE TABLE t_config (
+  "id" int NOT NULL,
+  "application" varchar(50) NOT NULL,
+  "profile" varchar(50) NOT NULL,
+  "label" varchar(50) NOT NULL,
+  "key" varchar(50) NOT NULL,
+  "value" varchar(500) NOT NULL,
+  primary key("id")
+  );
+
+CREATE SEQUENCE config_id_seq MINVALUE 1 NOMAXVALUE INCREMENT BY 1 START WITH 1 NOCACHE;
+
+CREATE OR REPLACE TRIGGER config_id_seq BEFORE INSERT ON t_config FOR EACH ROW WHEN(NEW."id" IS NULL)
+BEGIN
+SELECT config_id_seq.NEXTVAL INTO :NEW."id" FROM DUAL;
+END;
+/
+--根据全局配置中的RDCID判断当前来获取配置的RDC的角色，返回master或slave
+create or replace FUNCTION getRole(v_rdcid in varchar) return VARCHAR
+  as
+  v_role varchar(50);
+  v_masterrdcid varchar(50);
+begin
+  SELECT "value" INTO v_masterrdcid FROM t_config WHERE "application"='globle-config' and "key"='masterserver' and ROWNUM <= 1;
+  IF v_masterrdcid = v_rdcid THEN
+    v_role := 'master';
+  ELSE
+    v_role := 'slave';
+  END IF;
+  return v_role;
+end;
+/
+--根据全局配置返回当前来获取配置的服务的配置模式，rdcrole(依据角色，未配置时默认)、custom(依赖用户上传的label字段)、complex(将角色与用户label用-连接)
+CREATE OR REPLACE FUNCTION getMode(v_service in varchar) return VARCHAR
+  as
+  v_mode varchar(50);
+  v_count number(10);
+BEGIN
+  SELECT count(*) INTO v_count FROM t_config WHERE "application"='globle-config' and "label"=v_service and "key"='mode';
+  if v_count = 0 then
+    v_mode := 'rdcrole';
+  else
+     SELECT "value" INTO v_mode FROM t_config WHERE "application"='globle-config' and "label"=v_service and "key"='mode' and ROWNUM <= 1;
+  end if;
+  return v_mode;
+END;
+/
+--根据全局配置来确认当前数据库所处环境是生产环境、开发环境还是测试环境
+CREATE OR REPLACE FUNCTION getEnv return VARCHAR
+  as
+  v_env varchar(50);
+BEGIN
+  SELECT "value" INTO v_env FROM t_config WHERE "application"='globle-config' and "key"='enviorment' and ROWNUM <= 1;
+  return v_env;
+END;
+/
+--综合来获取配置的服务参数，调用前述函数，结合模式、角色等给出最终查询label值
+CREATE OR REPLACE FUNCTION getLabel(v_service in varchar, v_rdcid in varchar, v_customlabel in varchar) return VARCHAR
+  as
+  v_label varchar(50);
+  v_role varchar(50);
+  v_mode varchar(50);
+BEGIN
+  v_role := getrole(v_rdcid);
+  v_mode := getmode(v_service);
+  if v_mode = 'custom' then
+    v_label := v_customlabel;
+  elsif v_mode = 'rdcrole' then
+    v_label := v_role;
+  else
+    v_label := v_role || '-' || v_customlabel;
+  end if;
+  return v_label;
+END;
+/
+--创建最终配置查询结果行类型
+create or replace type rowtype_config_result as object
+(
+  "key" varchar(50),
+  "value" varchar(500)
+);
+/
+--创建最终配置查询结果表类型
+create or replace type tabletype_config_result as table of rowtype_config_result;
+/
+--创建最终配置查询函数
+create or replace function queryconfig(v_service in varchar, v_rdcid in varchar, v_customlabel in varchar)
+  return tabletype_config_result PIPELINED 
+  as
+    v rowtype_config_result;
+begin
+  for thisrow in (SELECT "key", "value" from t_config where "application"=v_service and "profile"=getenv() and "label"=getlabel(v_service,v_rdcid,v_customlabel)) loop
+    v := rowtype_config_result(thisrow."key", thisrow."value");
+    pipe row (v);
+  end loop;
+  return;
+end;
