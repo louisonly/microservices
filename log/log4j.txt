@@ -1,0 +1,17 @@
+问题1：自定义log4j的MongoAppender时，配置了log4j的properties文件，在外部调用logger时，一直无法调用里面的append方法。
+解决方案：pom文件中，spring-boot-starter中默认引入了log包，会与log4j冲突。按如下方式引入jar包，即可避免冲突！（折磨了好几天时间才发现这个问题，
+花费时间24h）
+最开始怀疑是无法读取到引入jar包中的配置文件，采用硬编码的方式能够达到预料结果。spring boot中的jar包冲突问题很头疼
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<version>1.5.13.RELEASE</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+    
+  问题2：
