@@ -14,4 +14,6 @@
 			</exclusions>
 		</dependency>
     
-  问题2：
+  问题2：自定义的MongoAppender，在append()方法中调用logger.info()，导致死循环，产生java.lang.StackOverflowError错误。（当前线程栈满了）
+  解决方案：在append()方法中去掉logger.info()即可。
+  
