@@ -1,0 +1,76 @@
+CREATE OR REPLACE FUNCTION queryfinalnew (v_service IN VARCHAR, v_rdcid IN VARCHAR, v_customlabel IN VARCHAR)
+RETURN tabletype_config_result PIPELINED
+AS
+v rowtype_config_result;
+v_label VARCHAR(50);
+v_profile VARCHAR(50);
+BEGIN
+  --根据profile、label准确查找相关配置信息
+  v_profile := GETENV();
+  v_label := getlabel(v_service,v_rdcid,v_customlabel);
+  FOR thisrow IN (
+  WITH
+    Q1 AS (SELECT "key","value" FROM TABLE(QUERYCONFIGMATCHED(v_service,v_profile,v_label))), --精准查找
+    Q2 AS (SELECT "key","value" FROM TABLE(QUERYCONFIGMATCHED(v_service,'-',v_label))),  --形如 - male形式的查找
+    Q3 AS (SELECT "key","value" FROM TABLE(QUERYCONFIGMATCHED(v_service,v_profile,'-'))), --形如 male - 形式的查找
+    Q4 AS (SELECT "key","value" FROM TABLE(QUERYCONFIGMATCHED(v_service,'-','-'))),    --形如 - - 形式的查找
+    Q5 AS (
+    SELECT "key","value" FROM Q1 
+    UNION ALL
+    SELECT "key","value" FROM Q2 
+    UNION ALL
+    SELECT "key","value" FROM Q3 
+    UNION ALL
+    SELECT "key","value" FROM Q4 
+    )
+    /*
+    SELECT "key","value" FROM Q5 t1 WHERE EXISTS(
+    SELECT "key","value" FROM Q5 t2 
+    WHERE t1."key" = t2."key"
+    GROUP BY t2."key" 
+    HAVING MIN(t2.rowid) = t1.rowid )
+    */
+    --SELECT TOP 1 "key","value" FROM Q5 ORDER BY "key"
+    
+    SELECT s."key",s."value" 
+    FROM (
+    SELECT "key","value", row_number() over (partition by "key" ORDER BY "key") as group_idx
+    FROM Q5
+    )s
+    WHERE s.group_idx = 1
+    
+    --SELECT "key"
+    ) LOOP
+    v := rowtype_config_result(thisrow."key", thisrow."value");
+    pipe row (v);
+  end loop;
+  return;
+END;
+
+
+
+测试sql
+select * from T_CONFIG t for update
+delete from t_config t where t."id" >28
+
+select * from table(queryfinal('demo-service',12233,'male'))
+
+select * from table(queryfinalnew('demo-service',12233,'male'))where rownum=1;
+
+select * from t_config t where t."application" = 'demo-service' 
+
+  WITH
+    Q1 AS (SELECT "key","value" FROM TABLE(QUERYCONFIGMATCHED('demo-service','dev','male'))), --精准查找
+    Q2 AS (SELECT "key","value" FROM TABLE(QUERYCONFIGMATCHED('demo-service','-','male'))),  --形如 - male形式的查找
+    Q3 AS (SELECT "key","value" FROM TABLE(QUERYCONFIGMATCHED('demo-service','dev','-'))), --形如 male - 形式的查找
+    Q4 AS (SELECT "key","value" FROM TABLE(QUERYCONFIGMATCHED('demo-service','-','-'))),    --形如 - - 形式的查找
+    Q5 AS (
+    SELECT "key","value" FROM Q1 
+    UNION ALL
+    SELECT "key","value" FROM Q2 
+    UNION ALL
+    SELECT "key","value" FROM Q3 
+    UNION ALL
+    SELECT "key","value" FROM Q4 
+    )
+    select * from Q5
