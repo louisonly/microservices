@@ -1,0 +1,28 @@
+--4次查询
+WITH Q AS (
+SELECT * FROM T_CONFIG WHERE "application"='demo-service' AND "profile"=GETENV() AND "label"=getlabel('demo-service',123444,'male')
+UNION
+SELECT * FROM T_CONFIG WHERE "application"='demo-service' AND "profile"='-' AND "label"=getlabel('demo-service',123444,'male')
+UNION
+SELECT * FROM T_CONFIG WHERE "application"='demo-service' AND "profile"=GETENV() AND "label"='-'
+UNION
+SELECT * FROM T_CONFIG WHERE "application"='demo-service' AND "profile"='-' AND "label"='-'
+)
+SELECT * FROM Q 
+
+
+--with子查询
+WITH 
+Q1 AS (SELECT "key","value" FROM T_CONFIG WHERE "application"='demo-service' AND "profile"=GETENV() AND "label"=getlabel('demo-service',123444,'male')),
+Q2 AS (SELECT "key","value" FROM T_CONFIG WHERE "application"='demo-service' AND "profile"='-' AND "label"=getlabel('demo-service',123444,'male')),
+Q3 AS (SELECT "key","value" FROM T_CONFIG WHERE "application"='demo-service' AND "profile"=GETENV() AND "label"='-'),
+Q4 AS (SELECT "key","value" FROM T_CONFIG WHERE "application"='demo-service' AND "profile"='-' AND "label"='-')
+SELECT "key","value" FROM Q1
+UNION
+SELECT "key","value" FROM Q2 t2 WHERE t2."key" NOT IN (SELECT "key" FROM Q1)
+UNION
+SELECT "key","value" FROM Q3 t3 WHERE t3."key" NOT IN (SELECT "key" FROM Q1 UNION SELECT "key" FROM Q2)
+UNION
+SELECT "key","value" FROM Q4 t4 WHERE t4."key" NOT IN (SELECT "key" FROM Q1 UNION SELECT "key" FROM Q2 UNION SELECT "key" FROM Q3)
+
+
