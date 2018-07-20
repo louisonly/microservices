@@ -1,0 +1,79 @@
+　https://www.cnblogs.com/ddbear/p/7111661.html
+ 
+ mongoDB 删除集合后，空间不释放，添加新集合，没有重新利用之前删除集合所空出来的空间，也就是数据库大小只增不减。
+
+方法有：
+
+1、导出导入 dump & restore
+
+2、修复数据库 repair database
+
+3、复制数据库 db.copyDatabase(“from”,”to”,”127.0.0.1:27017”);
+
+4、重新同步复制集
+
+ 
+
+方法一：导出导入 dump & restore
+
+所需时间根据数据库实际大小而定，如果数据量不大，dump不需要太长时间的情况下，或者经常备份有dump文件的情况下，这种方法很简单。
+
+备份
+
+#Mongodump –h IPAddress --port 27017 –d DatabaseName –u UserName –p Password –authenticationDatabase admin –o backup_dir
+
+恢复
+
+#Mongorestore –h IPAddress --port 27017 –d DatabaseName –u UserName –p Password –authenticationDatabase admin backup_dir
+
+ 
+
+方法二：修复数据库 repair database
+
+　　需要停机，即便你不停机的话 mongodb 自己也会锁住直到 repair 完成。注意要有足够的磁盘空间，需要额外一倍的空间，如果mongodb 占用了100G，那么 repair 时还需要额外的100G+2G 空间。可以追加磁盘，然后将目标目录指向新加的磁盘。
+
+我理解到官网的意思是，在确认修复过程不中断并且有足够的空闲空间的前提下，那么这个repair database方法是回收磁盘空间唯一合适的方法(注意前提啊)。
+
+ # mongod --dbpath /data/db --repair --repairpath /data/db0
+
+    如果当前磁盘足够的话可直接在 mongo 命令行中运行：
+
+    >  db.repairDatabase()
+
+     或者
+
+     > db.runCommand({ repairDatabase: 1 })
+
+第二种方法可以带其他几个参数
+
+{ repairDatabase: 1,
+
+preserveClonedFilesOnFailure: <boolean>,
+
+backupOriginalFiles: <boolean> }
+
+只要磁盘空间够基本上没什么问题。
+
+       这种方法有两个不好的地方。1.在生产上操作如果意外停止可能会造成数据无法恢复的危险。2.如果磁盘空间不足，小于现在这个db时间占有的空间，这种情况是用不了    db.repairDatabase()的。
+
+ 
+
+方法三：复制数据库 db.copydatabase
+
+1.db.copyDatabase("from","to","127.0.0.1:27017");复制出一个新的to数据库。这个已经是最小数据占用的数据。会在数据目录下产生to的相关数据文件。127.0.0.1:27017是from的数据库所在的地址和端口号。
+
+2.将所有程序的配置从from库改为to库。
+
+3删除from库。
+
+>use from
+
+> db.dropDatabase()
+
+这个方法的好处是可以时间将磁盘上的数据删除掉。节省出很大的空间。
+
+方法四：重新同步复制集
+
+　　还没整理好，后续再补充。
+
+ 
