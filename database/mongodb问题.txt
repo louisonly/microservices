@@ -1,1 +1,59 @@
 mongodb集合中有"-"形式的集合，在命令行中可以看到该集合，但是在执行查询操作时提示出错，例如执行db.cap-col.stats()时，提示col未定义。
+解决方案：mongodb命名规范中，禁止“_”以外的特殊字符，集合名建议小写
+
+创建固定集合时，设置固定集合大小为2GB时，程序报错。
+		CreateCollectionOptions options = new CreateCollectionOptions();
+		options.capped(true);
+		options.sizeInBytes(1024 * 1024 * 2048);
+原因分析：因为1024*1024*2048=2^31 > 2^31-1，超过了int表示的最大值，定义其中一个变量为long型即可。
+
+com.mongodb.MongoCommandException: Command failed with error 2: 'size has to be >= 0' on server localhost:27017. The full response is { "note" : "the autoIndexId option is deprecated and will be removed in a future release", "ok" : 0.0, "errmsg" : "size has to be >= 0", "code" : 2, "codeName" : "BadValue" }
+	at com.mongodb.connection.ProtocolHelper.getCommandFailureException(ProtocolHelper.java:115)
+	at com.mongodb.connection.CommandProtocol.execute(CommandProtocol.java:114)
+	at com.mongodb.connection.DefaultServer$DefaultServerProtocolExecutor.execute(DefaultServer.java:168)
+	at com.mongodb.connection.DefaultServerConnection.executeProtocol(DefaultServerConnection.java:289)
+	at com.mongodb.connection.DefaultServerConnection.command(DefaultServerConnection.java:176)
+	at com.mongodb.operation.CommandOperationHelper.executeWrappedCommandProtocol(CommandOperationHelper.java:216)
+	at com.mongodb.operation.CommandOperationHelper.executeWrappedCommandProtocol(CommandOperationHelper.java:207)
+	at com.mongodb.operation.CommandOperationHelper.executeWrappedCommandProtocol(CommandOperationHelper.java:146)
+	at com.mongodb.operation.CommandOperationHelper.executeWrappedCommandProtocol(CommandOperationHelper.java:139)
+	at com.mongodb.operation.CreateCollectionOperation$1.call(CreateCollectionOperation.java:380)
+	at com.mongodb.operation.CreateCollectionOperation$1.call(CreateCollectionOperation.java:376)
+	at com.mongodb.operation.OperationHelper.withConnectionSource(OperationHelper.java:426)
+	at com.mongodb.operation.OperationHelper.withConnection(OperationHelper.java:417)
+	at com.mongodb.operation.CreateCollectionOperation.execute(CreateCollectionOperation.java:376)
+	at com.mongodb.operation.CreateCollectionOperation.execute(CreateCollectionOperation.java:53)
+	at com.mongodb.Mongo.execute(Mongo.java:845)
+	at com.mongodb.Mongo$2.execute(Mongo.java:828)
+	at com.mongodb.MongoDatabaseImpl.createCollection(MongoDatabaseImpl.java:198)
+	at com.louis.mongodb.MongoTest.parse(MongoTest.java:74)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:75)
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:86)
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:84)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:252)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:94)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:70)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:191)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+
