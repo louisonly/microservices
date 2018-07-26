@@ -176,3 +176,24 @@ https://blog.csdn.net/qq_29692489/article/details/80072328
 ribbon:
   MaxAutoRetries: 3
   ReadTimeout: 3000
+  
+  
+  #请求处理的超时时间
+ribbon.ReadTimeout: 120000
+#请求连接的超时时间
+ribbon.ConnectTimeout: 30000
+ 
+#feign.hystrix.enabled: true
+#hystrix 熔断机制
+#hystrix:
+#  shareSecurityContext: true
+#  command:
+#    default:
+#      circuitBreaker:
+#        sleepWindowInMilliseconds: 100000
+#        forceClosed: true
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 600000
+
